@@ -2,7 +2,6 @@
 시나리오 3: Global + Local Path Planning 통합 (학생 과제)
 
 이 파일은 학생들이 구현해야 할 과제 파일입니다.
-TODO 표시된 부분을 완성하세요.
 """
 
 import numpy as np
