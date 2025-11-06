@@ -40,7 +40,7 @@ python scenario1_global_planning.py
 python scenario2_local_planning.py
 
 # 시나리오 3: 통합 과제
-python scenario3_solution.py
+python scenario3_challenge.py
 ```
 
 ---
