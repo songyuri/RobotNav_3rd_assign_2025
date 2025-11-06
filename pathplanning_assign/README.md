@@ -49,6 +49,7 @@ python scenario3_challenge.py
 
 ### 개요
 정적 장애물 환경에서 A* 또는 Dijkstra로 전역 경로를 계획합니다.
+예시 코드가 이미 작성되어 있으며, 시뮬레이션을 실행해보면서 주요 파라미터값을 바꿔보며 시도해보시고, 보고서에 작성해주세요.
 
 ### 실행
 ```bash
@@ -78,6 +79,7 @@ GOAL_POS = (45, 45)      # 목표점
 
 ### 개요
 동적 장애물 환경에서 DWA로 실시간 경로를 계획합니다.
+예시 코드가 이미 작성되어 있으며, 시뮬레이션을 실행해보면서 주요 파라미터값을 바꿔보며 시도해보시고, 보고서에 작성해주세요.
 
 ### 실행
 ```bash
@@ -118,11 +120,11 @@ DWA_CONFIG = {
 
 ### 구현 파일
 
-`scenario3_solution.py`
+`scenario3_challenge.py`
 
 ### 실행
 ```bash
-python scenario3_solution.py
+python scenario3_challenge.py
 ```
 
 **입력:**
@@ -172,28 +174,6 @@ def execute_step(self, dt):
     # 4. 목표 도달 및 충돌 확인
 ```
 
-### 구현 힌트
-
-**핵심 아이디어:**
-```python
-# Global path 생성
-from scenario1_global_planning import AStarPlanner
-planner = AStarPlanner(env, grid_resolution=1.0)
-global_path = planner.plan(START, GOAL)
-
-# Local goal 선택 (전방 주시)
-robot_pos = robot.get_position()
-distances = np.linalg.norm(global_path - robot_pos, axis=1)
-closest_idx = np.argmin(distances)
-local_goal = global_path[closest_idx + look_ahead]
-
-# DWA로 추종
-from scenario2_local_planning import DWA
-dwa = DWA(robot, dwa_config, env)
-v, w, _, _ = dwa.plan(local_goal, env)
-robot.update(v, w, dt)
-```
-
 ---
 
 ## 📊 평가 시스템
@@ -211,75 +191,7 @@ robot.update(v, w, dt)
 
 ### 랭킹
 - `rankings.json`에 자동 저장
-- TOP 10 랭킹 표시
 - 이름, 점수, 거리, 시간, 알고리즘 기록
-
----
-
-## 🔧 최적화 팁
-
-### Global Planning
-- 그리드 해상도 조정
-- 경로 스무딩
-- 장애물 마진 설정
-
-### Local Planning
-- DWA 가중치 튜닝
-- 예측 시간 조정
-- Look-ahead 거리 최적화
-
-### 통합
-- 적응형 속도 제어
-- 동적 재계획
-- 하이브리드 전략
-
----
-
-## 🐛 디버깅 가이드
-
-**로봇이 안 움직임**
-→ `v, w` 값 확인, `get_local_goal()` 반환값 체크
-
-**장애물 충돌**
-→ `obstacle_cost_gain` 높이기 (5.0 이상)
-
-**목표 미도달**
-→ `to_goal_cost_gain` 높이기, look-ahead 조정
-
-**속도 느림**
-→ `v_reso`, `w_reso` 줄이기 (5, 10 등)
-
----
-
-## 📖 알고리즘 설명
-
-### A* 알고리즘
-```
-f(n) = g(n) + h(n)
-g: 시작점에서 현재까지 비용
-h: 현재에서 목표까지 추정 비용 (휴리스틱)
-```
-
-### Dijkstra 알고리즘
-```
-A*에서 h(n) = 0인 경우
-모든 방향 균일하게 탐색
-```
-
-### DWA (Dynamic Window Approach)
-```
-1. 로봇의 동역학 제약으로 속도 공간 제한
-2. 가능한 (v, w) 조합 샘플링
-3. 각 조합의 궤적 예측
-4. 비용 함수로 최적 속도 선택
-```
-
-### 로봇 운동학
-```
-x' = v * cos(θ)
-y' = v * sin(θ)  
-θ' = ω
-```
 
 ---
 
@@ -303,32 +215,16 @@ pathplanning_assign/
 ## 🎓 과제 제출
 
 ### 제출 파일
-1. `scenario3_solution.py` (구현 완료)
-2. `rankings.json` (실행 결과)
-3. `report.pdf` (분석 보고서)
+깃허브에서 다운로드 받은 폴더 전체를 zip으로 압축하여 제출.
+용량 초과로 제출 안될 시, thddbfl20217@gmail.com으로 제출
 
 ### 보고서 내용
-1. 구현 설명
-2. 파라미터 튜닝 과정
+1. 시나리오 1, 2 파라미터 튜닝 설명
+2. 시나리오3 구현 설명
 3. 성능 분석
 4. 최적화 전략
 5. 결과 스크린샷
 
----
-
-## 💡 FAQ
-
-**Q: Global path가 장애물 통과**  
-A: 그리드 해상도 낮추기 (0.5)
-
-**Q: DWA가 지역 최적해에 갇힘**  
-A: `to_goal_cost_gain` 높이기
-
-**Q: 동적 장애물 충돌**  
-A: `predict_time` 늘리고 `obstacle_cost_gain` 높이기
-
-**Q: 랭킹 미등록**  
-A: 충돌하면 0점, 목표 도달 필수
 
 ---
 
