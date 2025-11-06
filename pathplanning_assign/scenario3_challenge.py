@@ -11,7 +11,6 @@ import matplotlib.patches as patches
 from matplotlib.animation import FuncAnimation
 import time
 import sys
-import sys
 import os
 import json
 from datetime import datetime
@@ -45,8 +44,8 @@ class HybridPlanner:
             goal: 최종 목표 위치 (x, y)
             global_planner_type: 'astar' 또는 'dijkstra'
             dwa_config: DWA 설정 딕셔너리
+        
         """
-        # TODO: 구현하세요
         pass
         
     def plan_global_path(self, start):
@@ -57,22 +56,22 @@ class HybridPlanner:
             start: 시작 위치 (x, y)
             
         Returns:
-            success: 경로 계획 성공 여부
+            success: 경로 계획 성공 여부 (bool)
+        
         """
-        # TODO: 구현하세요
         pass
         
     def get_local_goal(self, look_ahead_distance=5.0):
         """
-        전역 경로에서 지역 목표점 선택
+        전역 경로에서 지역 목표점 선택 (Pure Pursuit 방식)
         
         Args:
             look_ahead_distance: 전방 주시 거리
             
         Returns:
             local_goal: 지역 목표 위치 (x, y) 또는 None
+        
         """
-        # TODO: 구현하세요
         pass
         
     def execute_step(self, dt):
@@ -83,10 +82,10 @@ class HybridPlanner:
             dt: 시간 간격
             
         Returns:
-            completed: 목표 도달 여부
-            collision: 충돌 여부
+            completed: 목표 도달 여부 (bool)
+            collision: 충돌 여부 (bool)
+        
         """
-        # TODO: 구현하세요
         pass
 
 
@@ -109,11 +108,27 @@ class ChallengeEnvironment:
         env.add_static_obstacle(CircleObstacle(35, 25, 2))
         env.add_static_obstacle(CircleObstacle(40, 40, 2.5))
         
-        # 이동 장애물 (크기 증가!)
-        env.add_dynamic_obstacle(MovingObstacle(8, 22, 2.0, vx=0.6, vy=0.3))
-        env.add_dynamic_obstacle(MovingObstacle(28, 8, 2.0, vx=-0.5, vy=0.5))
-        env.add_dynamic_obstacle(MovingObstacle(14, 40, 2.0, vx=0.5, vy=-0.4))
-        env.add_dynamic_obstacle(MovingObstacle(42, 35, 2.0, vx=-0.4, vy=-0.5))
+        # 이동 장애물 (다양한 크기, 속도, 패턴!)
+        # 작은 빠른 장애물 (반경 1.0-1.5m, 빠른 속도)
+        env.add_dynamic_obstacle(MovingObstacle(8, 22, 1.2, vx=0.8, vy=0.4))
+        env.add_dynamic_obstacle(MovingObstacle(45, 15, 1.0, vx=-0.9, vy=0.6))
+        
+        # 중간 크기 장애물 (반경 1.5-2.0m, 중간 속도)
+        env.add_dynamic_obstacle(MovingObstacle(28, 8, 1.8, vx=-0.5, vy=0.5))
+        env.add_dynamic_obstacle(MovingObstacle(14, 40, 1.6, vx=0.6, vy=-0.5))
+        env.add_dynamic_obstacle(MovingObstacle(35, 35, 1.7, vx=-0.4, vy=-0.4))
+        
+        # 큰 느린 장애물 (반경 2.0-2.5m, 느린 속도)
+        env.add_dynamic_obstacle(MovingObstacle(42, 35, 2.3, vx=-0.3, vy=-0.4))
+        env.add_dynamic_obstacle(MovingObstacle(18, 25, 2.5, vx=0.3, vy=0.3))
+        
+        # 매우 작은 장애물 (반경 0.8m, 매우 빠름)
+        env.add_dynamic_obstacle(MovingObstacle(25, 20, 0.8, vx=1.0, vy=-0.8))
+        env.add_dynamic_obstacle(MovingObstacle(40, 10, 0.9, vx=-1.1, vy=0.7))
+        
+        # 지그재그 패턴 (서로 다른 속도)
+        env.add_dynamic_obstacle(MovingObstacle(12, 15, 1.4, vx=0.7, vy=0.0))
+        env.add_dynamic_obstacle(MovingObstacle(38, 28, 1.3, vx=0.0, vy=0.8))
         
         return env
 
@@ -240,7 +255,7 @@ def visualize_simulation(planner: HybridPlanner, dt=0.1):
         ax.set_aspect('equal')
         ax.set_xlabel('X (m)', fontsize=12)
         ax.set_ylabel('Y (m)', fontsize=12)
-        ax.set_title('Global + Local Path Planning', fontsize=16, fontweight='bold')
+        ax.set_title('시나리오 3: Global + Local Path Planning (학생 과제)', fontsize=16, fontweight='bold')
         ax.grid(True, alpha=0.3)
         
         # 고정 장애물
@@ -383,17 +398,17 @@ def main():
         choice = '1'
     global_planner_type = 'astar' if choice == '1' else 'dijkstra'
     
-    # DWA 설정 (속도 최적화 + 장애물 회피 시 속도 향상)
+    # DWA 설정 (동적 장애물 회피 + 속도 유지 균형!)
     DWA_CONFIG = {
         'max_accel': 0.8,
         'max_delta_yaw_rate': 60.0 * np.pi / 180.0,
         'v_reso': 8,
         'w_reso': 16,
         'dt': 0.1,
-        'predict_time': 2.5,
-        'to_goal_cost_gain': 1.0,
-        'obstacle_cost_gain': 5.0,
-        'speed_cost_gain': 0.05,
+        'predict_time': 3.0,           # 3.0초 (더 먼 미래 예측)
+        'to_goal_cost_gain': 1.2,      # 목표 지향 강화
+        'obstacle_cost_gain': 4.0,     # 장애물 회피 적절히
+        'speed_cost_gain': 0.5,        # 속도 유지 중요도 증가
     }
     
     # 환경 및 로봇 생성
