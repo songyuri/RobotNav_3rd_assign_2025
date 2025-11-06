@@ -240,7 +240,7 @@ def visualize_simulation(planner: HybridPlanner, dt=0.1):
         ax.set_aspect('equal')
         ax.set_xlabel('X (m)', fontsize=12)
         ax.set_ylabel('Y (m)', fontsize=12)
-        ax.set_title('시나리오 3: Global + Local Path Planning (학생 과제)', fontsize=16, fontweight='bold')
+        ax.set_title('Global + Local Path Planning', fontsize=16, fontweight='bold')
         ax.grid(True, alpha=0.3)
         
         # 고정 장애물
