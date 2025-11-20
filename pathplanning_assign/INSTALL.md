@@ -107,25 +107,6 @@ python -c "import matplotlib; print(matplotlib.get_backend())"
 
 ---
 
-## 📁 디렉토리 구조 확인
-
-```bash
-pathplanning_assign/
-├── common/                    # 필수!
-│   ├── __init__.py
-│   ├── robot.py
-│   └── environment.py
-├── scenario1_global_planning.py
-├── scenario2_local_planning.py
-├── scenario3_challenge.py     # 학생 과제 파일
-├── scenario3_solution.py      # 정답 참고용
-├── requirements.txt           # 이 파일!
-├── INSTALL.md                 # 설치 가이드
-└── README.md
-```
-
----
-
 ## ✅ 빠른 시작 (요약)
 
 ```bash
