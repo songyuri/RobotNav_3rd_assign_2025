@@ -160,23 +160,4 @@ conda install numpy matplotlib
 python scenario1_global_planning.py
 ```
 
-### Docker 사용자
 
-```bash
-# Python 이미지로 실행
-docker run -it --rm -v $(pwd):/workspace -w /workspace python:3.10 bash
-pip install numpy matplotlib
-python scenario1_global_planning.py
-```
-
----
-
-## 📞 문의
-
-설치 관련 문제가 계속되면 다음 정보와 함께 문의하세요:
-
-1. OS 종류 및 버전 (예: Ubuntu 22.04, macOS 14.0, Windows 11)
-2. Python 버전 (`python --version`)
-3. 오류 메시지 전체 내용
-
-**담당 조교 이메일**: [조교 이메일 주소]
