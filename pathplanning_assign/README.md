@@ -21,14 +21,33 @@
 
 ---
 
-## 🚀 빠른 시작
+## 🚀 시작하기
 
-### 환경 설정
+### 1. 환경 설정 및 설치
+
+**처음 설치하는 경우** (자세한 내용은 [INSTALL.md](INSTALL.md) 참고):
 
 ```bash
-cd /home/syr/pathplanning_assign
-source .venv/bin/activate  # Python 가상환경
+# 1. 과제 디렉토리로 이동
+cd pathplanning_assign
+
+# 2. (옵션) Python 가상환경 생성
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+
+# 3. 필요한 패키지 설치
+pip install -r requirements.txt
 ```
+
+**가상환경 없이 바로 실행하려면**:
+```bash
+pip install numpy matplotlib
+```
+
+**필요한 패키지:**
+- Python 3.8 이상
+- numpy >= 1.21.0
+- matplotlib >= 3.4.0
 
 ### 시나리오 실행
 
